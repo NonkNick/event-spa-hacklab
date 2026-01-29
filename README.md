@@ -13,8 +13,11 @@
       "id": "string",
       "start": "datetime",
       "end": "datetime",
-      "type": "enum('workshop', 'lecture', 'networking')",
-      "location": "string"
+      "speakerId": "string",
+      "type": "enum('drinks', 'break', 'lecture')",
+      "location": "string",
+      "title": "string",
+      "description": "string"
     }
   ]
 }
@@ -39,5 +42,15 @@
   "name": "string",
   "email": "string",
   "isAdmin": "boolean"
+}
+```
+
+### Speaker
+```json
+{
+  "id": "string",
+  "name": "string",
+  "bio": "string",
+  "image": "string"
 }
 ```

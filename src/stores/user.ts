@@ -1,35 +1,46 @@
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 
-interface User {
-    id: string
-    name: string
-    email: string
-    isAdmin: boolean
+export interface User {
+    id: string;
+    name: string;
+    email: string;
+    isAdmin: boolean;
 }
 
-export const useUserStore = defineStore('users', {
+export const useUserStore = defineStore('user', {
     state: () => ({
+        users: [] as User[],
         currentUser: null as User | null
     }),
 
     getters: {
-        // Get current user
-        user: (state) => state.currentUser,
+        getUserById: (state) => (id: string) => {
+            return state.users.find(user => user.id === id);
+        },
 
-        // Check if admin
-        isAdmin: (state) => state.currentUser?.isAdmin || false,
+        getAllUsers: (state) => state.users,
 
-        // Check if logged in
-        isLoggedIn: (state) => state.currentUser !== null
+        isCurrentUserAdmin: (state) => state.currentUser?.isAdmin ?? false
     },
 
     actions: {
-        setUser(user: User | null) {
-            this.currentUser = user
+        addUser(user: User) {
+            this.users.push(user);
         },
 
-        logout() {
-            this.currentUser = null
+        updateUser(id: string, updatedUser: Partial<User>) {
+            const index = this.users.findIndex(u => u.id === id);
+            if (index !== -1) {
+                this.users[index] = { ...this.users[index], ...updatedUser } as User;
+            }
+        },
+
+        deleteUser(id: string) {
+            this.users = this.users.filter(u => u.id !== id);
+        },
+
+        setCurrentUser(user: User | null) {
+            this.currentUser = user;
         }
     }
-})
+});

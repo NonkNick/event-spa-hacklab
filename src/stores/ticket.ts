@@ -1,67 +1,49 @@
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 
-interface Ticket {
-    id: string
-    eventId: string
-    userId: string
-    name: string
-    price: number
-    createdAt: string
+export interface Ticket {
+    id: string;
+    eventId: string;
+    userId: string;
+    name: string;
+    price: number;
+    createdAt: Date;
 }
 
-export const useTicketStore = defineStore('tickets', {
+export const useTicketStore = defineStore('ticket', {
     state: () => ({
         tickets: [] as Ticket[]
     }),
 
     getters: {
-        // Get all tickets
-        all: (state) => state.tickets,
+        getTicketById: (state) => (id: string) => {
+            return state.tickets.find(ticket => ticket.id === id);
+        },
 
-        getById: (state) => (id: string) =>
-            state.tickets.find(t => t.id === id),
+        getTicketsByEventId: (state) => (eventId: string) => {
+            return state.tickets.filter(ticket => ticket.eventId === eventId);
+        },
 
-        // Get tickets by event ID
-        byEventId: (state) => (eventId: string) =>
-            state.tickets.filter(t => t.eventId === eventId),
+        getTicketsByUserId: (state) => (userId: string) => {
+            return state.tickets.filter(ticket => ticket.userId === userId);
+        },
 
-        // Get tickets by user ID
-        byUserId: (state) => (userId: string) =>
-            state.tickets.filter(t => t.userId === userId),
-
-        // Get sold count for event
-        soldCount: (state) => (eventId: string) =>
-            state.tickets.filter(t => t.eventId === eventId).length
+        getAllTickets: (state) => state.tickets
     },
 
     actions: {
-        // Set all tickets
-        setTickets(tickets: Ticket[]) {
-            this.tickets = tickets
-        },
-
-        // Add ticket
         addTicket(ticket: Ticket) {
-            this.tickets.push(ticket)
+            this.tickets.push(ticket);
         },
 
-        // Create ticket
-        createTicket(eventId: string, userId: string, name: string, price: number) {
-            const ticket: Ticket = {
-                id: `ticket-${Date.now()}-${Math.random()}`,
-                eventId,
-                userId,
-                name,
-                price,
-                createdAt: new Date().toISOString()
+        updateTicket(id: string, updatedTicket: Partial<Ticket>) {
+            const index = this.tickets.findIndex(t => t.id === id);
+            if (index !== -1) {
+                this.tickets[index] = { ...this.tickets[index], ...updatedTicket } as Ticket;
             }
-            this.tickets.push(ticket)
-            return ticket
         },
 
-        // Remove ticket
-        removeTicket(id: string) {
-            this.tickets = this.tickets.filter(t => t.id !== id)
+        deleteTicket(id: string) {
+            this.tickets = this.tickets.filter(t => t.id !== id);
         }
     }
-})
+});
