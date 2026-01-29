@@ -1,26 +1,43 @@
-event {
-    speaker: user() {
-        name: string
-        rol: enum('deelnemer', 'organisator', 'spreker')
-    }
-    tickets[]() {
-        naam: string
-        prijs: number
-    }
-    breaks[]() {
-        name: string
-        start: datetime
-        end: datetime
-        type: enum('break', 'booze')
-    }
-    available tickets: number
-    location: string
-    start: datetime
-    end: datetime
-    type: enum('workshop', 'lezing', 'netwerken')
-}
+# Event Planner - Pinia Store Structure
 
-user {
-    naam: string
-    rol: enum('attendee', 'admin', 'speaker')
+## Data Models
+
+### Event
+```json
+{
+  "id": "string",
+  "name": "string",
+  "maxAttendees": "number",
+  "sessions": [
+    {
+      "id": "string",
+      "start": "datetime",
+      "end": "datetime",
+      "type": "enum('workshop', 'lecture', 'networking')",
+      "location": "string"
+    }
+  ]
 }
+```
+
+### Ticket
+```json
+{
+  "id": "string",
+  "eventId": "string",
+  "userId": "string",
+  "name": "string",
+  "price": "number",
+  "createdAt": "datetime"
+}
+```
+
+### User
+```json
+{
+  "id": "string",
+  "name": "string",
+  "email": "string",
+  "isAdmin": "boolean"
+}
+```
