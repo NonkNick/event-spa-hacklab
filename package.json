@@ -9,15 +9,33 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tailwindcss/postcss": "^4.1.18",
     "pinia": "^3.0.4",
-    "vue": "^3.5.24"
+    "vue": "^3.5.24",
+    "vue-router": "^5.0.1"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/tsconfig": "^0.8.1",
+    "autoprefixer": "^10.4.24",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.18",
     "typescript": "~5.9.3",
     "vite": "^7.2.4",
     "vue-tsc": "^3.1.4"
-  }
+  },
+  "description": "```json\r {\r   \"id\": \"string\",\r   \"name\": \"string\",\r   \"maxAttendees\": \"number\",\r   \"sessions\": [\r     {\r       \"id\": \"string\",\r       \"start\": \"datetime\",\r       \"end\": \"datetime\",\r       \"speakerId\": \"string\",\r       \"type\": \"enum('drinks', 'break', 'lecture')\",\r       \"location\": \"string\",\r       \"title\": \"string\",\r       \"description\": \"string\"\r     }\r   ]\r }\r ```",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NonkNick/event-spa-hacklab.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NonkNick/event-spa-hacklab/issues"
+  },
+  "homepage": "https://github.com/NonkNick/event-spa-hacklab#readme"
 }
