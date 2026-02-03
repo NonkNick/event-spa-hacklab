@@ -1,5 +1,6 @@
 <template>
-  <div class="w-full h-full bg-orange-100 rounded-3xl overflow-y-auto">
+  <div class="w-full h-full bg-orange-100  dark:bg-[#3A344C]
+rounded-3xl overflow-y-auto">
     <div
         class="relative w-full my-2"
         :style="{ height: timelineHeightPx + 'px' }"
@@ -7,7 +8,8 @@
       <div
           v-for="item in sessionLayouts"
           :key="item.session.id"
-          class="absolute left-16 right-4 bg-orange-400 rounded-xl p-3 text-white shadow"
+          class="absolute left-16 right-4 bg-orange-400 rounded-xl
+          p-3 text-white shadow z-10"
           :style="{ top: item.topPx + 'px', height: item.heightPx + 'px' }"
       >
         <div class="font-semibold">{{ item.session.title }}</div>
@@ -21,11 +23,18 @@
       <div
           v-for="index in hourCount"
           :key="index"
-          class="absolute left-0 w-full border-t border-orange-200 text-xs text-orange-500"
+          class="absolute left-0 w-full border-t border-orange-200
+         dark:border-orange-500 text-xs text-orange-500
+         pointer-events-none z-0"
           :style="{ top: hourIndexToY(index) + 'px' }"
       >
-        <span class="absolute -top-2 left-3 bg-orange-100 px-1 z-10">
-          {{ hourIndexToTime(index).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
+        <span
+            class="absolute -top-2 left-3 bg-orange-100 px-1
+         dark:bg-[#3A344C]
+         pointer-events-none z-0"
+        >
+          {{ hourIndexToTime(index).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+          }}
         </span>
       </div>
     </div>

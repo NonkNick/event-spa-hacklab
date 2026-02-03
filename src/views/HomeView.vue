@@ -363,7 +363,16 @@
 								</button>
 							</div>
 						</div>
+
 					</div>
+          <div
+              class="max-h-[700px] overflow-y-auto
+         scrollbar-thin
+         scrollbar-thumb-[#FF8A3D]
+         scrollbar-track-transparent"
+          >
+            <EventDisplay :event="demoEvent" />
+          </div>
 					<!-- Card END -->
 				</div>
 			</div>
@@ -385,7 +394,57 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { ref } from 'vue'
+import type {Event} from "../stores/event.ts";
+import EventDisplay from "../components/EventDisplay.vue";
 
+
+const demoEvent: Event = {
+  id: 'evt-001',
+  name: 'Vue.js Conference 2024',
+  maxAttendees: 250,
+  sessions: [
+    {
+      id: 'ses-001',
+      start: new Date('2024-07-15T09:00:00'),
+      end: new Date('2024-07-15T10:30:00'),
+      speakerId: 'spk-001',
+      type: 'lecture',
+      location: 'Main Hall',
+      title: 'Introduction to Vue 3 Composition API',
+      description: 'Learn the fundamentals of Vue 3 Composition API and how to build modern applications.'
+    },
+    {
+      id: 'ses-002',
+      start: new Date('2024-07-15T10:30:00'),
+      end: new Date('2024-07-15T11:00:00'),
+      speakerId: 'spk-002',
+      type: 'break',
+      location: 'Lobby',
+      title: 'Coffee Break',
+      description: 'Network with other attendees and grab some refreshments.'
+    },
+    {
+      id: 'ses-003',
+      start: new Date('2024-07-15T11:00:00'),
+      end: new Date('2024-07-15T12:30:00'),
+      speakerId: 'spk-003',
+      type: 'lecture',
+      location: 'Room A',
+      title: 'Advanced State Management with Pinia',
+      description: 'Deep dive into Pinia store patterns and best practices for large applications.'
+    },
+    {
+      id: 'ses-004',
+      start: new Date('2024-07-15T18:00:00'),
+      end: new Date('2024-07-15T20:00:00'),
+      speakerId: 'spk-004',
+      type: 'drinks',
+      location: 'Rooftop Bar',
+      title: 'Networking Drinks',
+      description: 'Unwind with fellow developers and speakers over drinks and appetizers.'
+    }
+  ]
+};
 const mobileMenuOpen = ref(false)
 
 const toggleMobileMenu = () => {
