@@ -6,6 +6,9 @@ export interface Ticket {
     userId: string;
     name: string;
     price: number;
+    location?: string;
+    eventDate?: string;
+    eventTime?: string;
     createdAt: Date;
 }
 
