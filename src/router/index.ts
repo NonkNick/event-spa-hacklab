@@ -8,6 +8,10 @@ const router = createRouter({
             path: '/',
             name: 'event-demo',
             component: EventDemoView
+        },
+        {
+            path: '/test',
+            component: () => import('../views/TestAdmin.vue')
         }
     ]
 })
