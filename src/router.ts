@@ -4,6 +4,7 @@ import Home from "./views/HomeView.vue";
 
 const routes = [
     { path: "/", name: "Home", component: Home },
+     { path: '/test', component: () => import('./views/TestAdmin.vue') }
 ];
 
 export const router = createRouter({

@@ -86,6 +86,8 @@ const toggleDarkMode = () => {
 						🌙 / ☀️
 					</button>
 
+					<TicketSidebar />
+
 					<button
 						@click="toggleMobileMenu"
 						class="md:hidden text-2xl"
@@ -308,8 +310,9 @@ const toggleDarkMode = () => {
 										<span class="font-bold">Tijd:</span> 09:00 – 09:30
 									</li>
 								</ul>
-
+						
 								<button
+									@click="buyTicket('presentatie-hacklab','Presentatie Hacklab',10,'Zaal A','25-10-2026','09:00 – 09:30')"
 									class="mt-6 w-full
 									bg-[#FF8A3D] hover:bg-[#E6752F]
 									text-white font-semibold
@@ -382,6 +385,7 @@ const toggleDarkMode = () => {
 								</ul>
 
 								<button
+									@click="buyTicket('hackathon','Hackathon',25,'Zaal C','15-3-2026','11:00 – 15:30')"
 									class="mt-6 w-full
 									bg-[#FF8A3D] hover:bg-[#E6752F]
 									text-white font-semibold
@@ -412,4 +416,69 @@ const toggleDarkMode = () => {
 			© 2026 EventLab
 		</footer>
 	</div>
+</template>
+
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
+import TicketSidebar from '../components/TicketSidebar.vue'
+import { useTicketStore } from '../stores/ticket'
+import { useUserStore } from '../stores/user'
+
+const mobileMenuOpen = ref(false)
+const ticketStore = useTicketStore()
+const userStore = useUserStore()
+
+const toggleMobileMenu = () => {
+	mobileMenuOpen.value = !mobileMenuOpen.value
+}
+
+onMounted(() => {
+	if (
+		localStorage.theme === 'dark' ||
+		(!('theme' in localStorage) &&
+		window.matchMedia('(prefers-color-scheme: dark)').matches)
+	) {
+		document.documentElement.classList.add('dark')
+	} else {
+		document.documentElement.classList.remove('dark')
+	}
+
+	if (!userStore.currentUser) {
+		userStore.setCurrentUser({
+			id: 'demo-user',
+			name: 'Demo User',
+			email: 'demo@example.com',
+			isAdmin: false
+		})
+	}
+})
+
+const toggleDarkMode = () => {
+	const isDark = document.documentElement.classList.toggle('dark')
+	localStorage.theme = isDark ? 'dark' : 'light'
+}
+
+const buyTicket = (
+	eventId: string,
+	name: string,
+	price: number,
+	location?: string,
+	eventDate?: string,
+	eventTime?: string
+) => {
+	const userId = userStore.currentUser?.id ?? 'demo-user'
+	const ticket = {
+		id: `${Date.now()}-${Math.random().toString(36).slice(2,8)}`,
+		eventId,
+		userId,
+		name,
+		price,
+		location,
+		eventDate,
+		eventTime,
+		createdAt: new Date()
+	}
+	ticketStore.addTicket(ticket)
+}
+</script>
 </template>
