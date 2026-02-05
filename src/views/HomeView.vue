@@ -88,18 +88,12 @@ const buyTicket = (
 
 				<ul class="hidden md:flex
 					items-center gap-12 text-lg">
-					<li class="hover:text-[#FF8A3D] cursor-pointer transition-colors">
-						Event
-					</li>
-					<li class="hover:text-[#FF8A3D] cursor-pointer transition-colors">
-						Sprekers
-					</li>
-					<li class="hover:text-[#FF8A3D] cursor-pointer transition-colors">
+					<RouterLink to="/#programma" class="hover:text-[#FF8A3D]">
 						Programma
-					</li>
-					<li class="hover:text-[#FF8A3D] cursor-pointer transition-colors">
-						Tickets
-					</li>
+					</RouterLink>
+					<RouterLink to="/#sprekers" class="hover:text-[#FF8A3D]">
+						Sprekers
+					</RouterLink>
 				</ul>
 
 				<div class="flex items-center gap-4">
@@ -124,19 +118,15 @@ const buyTicket = (
 				<ul class="flex flex-col text-center py-4 gap-0">
 					<li class="hover:text-[#FF8A3D] hover:bg-[#3A344C] dark:hover:bg-[#e7d6bc] py-3 cursor-pointer transition-colors"
 						@click="mobileMenuOpen = false">
-						Event
+						<RouterLink to="/#programma" class="hover:text-[#FF8A3D]">
+							Programma
+						</RouterLink>
 					</li>
 					<li class="hover:text-[#FF8A3D] hover:bg-[#3A344C] dark:hover:bg-[#e7d6bc] py-3 cursor-pointer transition-colors"
 						@click="mobileMenuOpen = false">
-						Sprekers
-					</li>
-					<li class="hover:text-[#FF8A3D] hover:bg-[#3A344C] dark:hover:bg-[#e7d6bc] py-3 cursor-pointer transition-colors"
-						@click="mobileMenuOpen = false">
-						Programma
-					</li>
-					<li class="hover:text-[#FF8A3D] hover:bg-[#3A344C] dark:hover:bg-[#e7d6bc] py-3 cursor-pointer transition-colors"
-						@click="mobileMenuOpen = false">
-						Tickets
+						<RouterLink to="/#sprekers" class="hover:text-[#FF8A3D]">
+							Sprekers
+						</RouterLink>
 					</li>
 				</ul>
 			</div>
@@ -185,7 +175,7 @@ const buyTicket = (
 
 					<div class="space-y-3 text-base">
 						<div>
-							<span class="font-bold">Locatie:</span> Grote Zaal
+							<span class="font-bold">Locatie:</span> Zaal A
 						</div>
 						<div>
 							<span class="font-bold">Datum:</span> 25-10-2026
@@ -194,7 +184,9 @@ const buyTicket = (
 							<span class="font-bold">Tijd:</span> 09:00 – 10:00
 						</div>
 
-						<button class="mt-4 w-full
+						<button 
+							@click="buyTicket('Hackfront Conference 2026', 'Hackfront Conference 2026', 10, 'Zaal A', '25-10-2026', '09:00 – 10:00')"
+							class="mt-4 w-full
 							bg-[#FF8A3D] hover:bg-[#E6752F]
 							text-white font-bold
 							py-3 rounded-lg
@@ -206,7 +198,7 @@ const buyTicket = (
 			</section>
 		</main>
 
-		<section class="bg-[#E7D6BC] dark:bg-[#12111A]">
+		<section id="programma" class="bg-[#E7D6BC] dark:bg-[#12111A]">
 			<div class="w-full max-w-6xl mx-auto mt-16 px-4">
 				<h2 class="text-4xl font-bold mb-8 text-center
 					text-[#3F3A56] dark:text-[#F3ECDD]">
@@ -376,11 +368,9 @@ const buyTicket = (
 			</div>
 		</section>
 
-		<section class="bg-[#FBF6EE] dark:bg-[#1F1D2B]">
+		<section id="sprekers" class="bg-[#FBF6EE] dark:bg-[#1F1D2B]">
 			<SpeakerGrid />
 		</section>
-
-
 
 		<footer class="w-full py-6 text-center
 			bg-[#3F3A56] dark:bg-[#2C2740]
