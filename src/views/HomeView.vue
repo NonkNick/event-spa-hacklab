@@ -1,3 +1,32 @@
+<script setup lang="ts">
+import { onMounted } from 'vue'
+import { ref } from 'vue'
+import SpeakerGrid from '../components/SpeakerGrid.vue'
+
+const mobileMenuOpen = ref(false)
+
+const toggleMobileMenu = () => {
+	mobileMenuOpen.value = !mobileMenuOpen.value
+}
+
+onMounted(() => {
+	if (
+		localStorage.theme === 'dark' ||
+		(!('theme' in localStorage) &&
+		window.matchMedia('(prefers-color-scheme: dark)').matches)
+	) {
+		document.documentElement.classList.add('dark')
+	} else {
+		document.documentElement.classList.remove('dark')
+	}
+})
+
+const toggleDarkMode = () => {
+	const isDark = document.documentElement.classList.toggle('dark')
+	localStorage.theme = isDark ? 'dark' : 'light'
+}
+</script>
+
 <template>
 	<div
 		class="flex flex-col min-h-screen
@@ -52,7 +81,7 @@
 						class="py-1 px-3 rounded
 						text-[#FF8A3D]
 						hover:bg-[#FF8A3D] hover:text-[#3F3A56]
-						transition-colors duration-300"
+						transition-colors duration-300 cursor-pointer"
 					>
 						🌙 / ☀️
 					</button>
@@ -371,9 +400,12 @@
 					<!-- Card END -->
 				</div>
 			</div>
-
-			
 		</section>
+
+		<section class="bg-[#FBF6EE] dark:bg-[#1F1D2B]">
+				<SpeakerGrid />
+		</section>
+
 
 
 		<footer
@@ -449,3 +481,4 @@ const buyTicket = (
 	ticketStore.addTicket(ticket)
 }
 </script>
+</template>
