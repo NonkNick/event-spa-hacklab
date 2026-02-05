@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
-import { useSpeakerStore, type Speaker } from '../stores/speaker'
+import { useSpeakerStore, type Speaker } from '../stores/speaker.ts'
 import { nanoid } from 'nanoid'
 
 type SocialPlatform =
@@ -35,11 +35,11 @@ const form = reactive({
 	socials: { ...(props.speaker?.socials ?? {}) } as Record<SocialPlatform, boolean>
 })
 
-const onImageChange = (e: Event) => {
-	const file = (e.target as HTMLInputElement).files?.[0]
-	if (!file) return
+type Gender = 'men' | 'women'
 
-	form.image = URL.createObjectURL(file)
+const setRandomImage = (gender: Gender) => {
+	const randomIndex = Math.floor(Math.random() * 100)
+	form.image = `https://randomuser.me/api/portraits/${gender}/${randomIndex}.jpg`
 }
 
 const save = () => {
@@ -79,12 +79,28 @@ const inputClass =
 			/>
 
             <label class="text-sm">Afbeelding spreker</label>
-			<input
-				type="file"
-				accept="image/*"
-				@change="onImageChange"
-				:class="inputClass + ' my-2'"
-			/>
+
+			<div class="flex gap-3 my-3">
+				<button
+					type="button"
+					@click="setRandomImage('men')"
+					class="flex-1 px-4 py-2 rounded-lg text-sm font-medium
+					bg-black/5 hover:bg-black/10
+					dark:bg-white/10 dark:hover:bg-white/20"
+				>
+					Random man
+				</button>
+
+				<button
+					type="button"
+					@click="setRandomImage('women')"
+					class="flex-1 px-4 py-2 rounded-lg text-sm font-medium
+					bg-black/5 hover:bg-black/10
+					dark:bg-white/10 dark:hover:bg-white/20"
+				>
+					Random vrouw
+				</button>
+			</div>
 
 			<img
 				v-if="form.image"

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import type { Speaker, SocialPlatform } from '../stores/speaker'
+import type { Speaker, SocialPlatform } from '../stores/speaker.ts'
 
 const adminMode = ref(true)
 const isAdmin = computed(() => adminMode.value)

@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
-import { useSpeakerStore } from '../stores/speaker'
+import { useSpeakerStore } from '../stores/speaker.ts'
 import { storeToRefs } from 'pinia'
 
 import SpeakerCard from './SpeakerCard.vue'
 import AddSpeakerCard from './AddSpeakerCard.vue'
 import SpeakerFormModal from './SpeakerFormModal.vue'
-import type { Speaker } from '../stores/speaker'
+import type { Speaker } from '../stores/speaker.ts'
 
 const adminMode = ref(true)
 const isAdmin = computed(() => adminMode.value)

@@ -23,7 +23,7 @@
 			</span>
 		</button>
 
-		<!-- Overlay to close sidebar when clicking outside -->
+		<!-- Overlay -->
 		<transition
 			enter-active-class="transition-opacity duration-300"
 			enter-from-class="opacity-0"
@@ -39,7 +39,7 @@
 			></div>
 		</transition>
 
-		<!-- Sidebar Slide-in -->
+		<!-- Sidebar -->
 		<transition
 			enter-active-class="transition ease-out duration-300"
 			enter-from-class="translate-x-full"
@@ -63,14 +63,14 @@
 					px-4 py-3 flex items-center justify-between"
 				>
 					<h3 class="font-bold text-[#3F3A56] dark:text-[#F3ECDD]">
-						Your Tickets
+						Jouw tickets
 					</h3>
 					<button
 						@click="sidebarOpen = false"
 						class="text-[#3F3A56] dark:text-[#F3ECDD]
 						hover:text-[#FF8A3D]
 						transition-colors"
-						aria-label="Close sidebar"
+						aria-label="Sluit sidebar"
 					>
 						✕
 					</button>
@@ -80,19 +80,25 @@
 				<div class="flex-1 overflow-y-auto p-4">
 					<div v-if="userTickets.length === 0" class="text-center py-8">
 						<p class="text-[#6B647A] dark:text-[#D6CCE5] text-sm">
-							No tickets purchased yet
+							Je hebt nog geen tickets gekocht
 						</p>
 					</div>
 
 					<div v-else>
 						<div class="flex items-center justify-between mb-3">
-							<span class="font-semibold text-sm text-[#3F3A56] dark:text-[#F3ECDD]">Bought tickets</span>
+							<span
+								class="font-semibold text-sm text-[#3F3A56] dark:text-[#F3ECDD]"
+							>
+								Gekochte tickets
+							</span>
+
 							<button
 								@click="showTickets = !showTickets"
-								class="text-sm text-[#3F3A56] dark:text-[#F3ECDD] hover:text-[#FF8A3D] transition-colors"
+								class="text-sm text-[#3F3A56] dark:text-[#F3ECDD]
+								hover:text-[#FF8A3D] transition-colors"
 							>
-								<span v-if="showTickets">Hide ▴</span>
-								<span v-else>Show ▾ ({{ userTickets.length }})</span>
+								<span v-if="showTickets">Verbergen ▴</span>
+								<span v-else>Toon ▾ ({{ userTickets.length }})</span>
 							</button>
 						</div>
 
@@ -115,17 +121,17 @@
 											text-xs font-semibold
 											px-2 py-1 rounded-full"
 										>
-											✓
+											Geldig
 										</span>
 									</div>
 									<p class="text-sm text-[#6B647A] dark:text-[#D6CCE5] mb-1">
-										Location: {{ ticket.location ?? '—' }}
+										Locatie: {{ ticket.location ?? '—' }}
 									</p>
 									<p class="text-sm text-[#6B647A] dark:text-[#D6CCE5] mb-1">
-										Time: {{ ticket.eventTime ?? '—' }}
+										Tijd: {{ ticket.eventTime ?? '—' }}
 									</p>
 									<p class="text-sm text-[#6B647A] dark:text-[#D6CCE5]">
-										Date: {{ ticket.eventDate ?? '—' }}
+										Datum: {{ ticket.eventDate ?? '—' }}
 									</p>
 								</div>
 							</div>
@@ -143,9 +149,10 @@ import { useUserStore } from '../stores/user'
 import { useTicketStore } from '../stores/ticket'
 
 const sidebarOpen = ref(false)
+const showTickets = ref(true)
+
 const userStore = useUserStore()
 const ticketStore = useTicketStore()
-const showTickets = ref(false)
 
 const userTickets = computed(() => {
 	const uid = userStore.currentUser?.id
