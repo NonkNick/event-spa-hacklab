@@ -1,9 +1,9 @@
 <template>
   <div class="w-full h-full bg-orange-100 rounded-3xl overflow-y-auto">
-    <div
-        class="relative w-full my-2"
-        :style="{ height: timelineHeightPx + 'px' }"
-    >
+  <div
+  class="relative w-full my-2"
+  :style="{ height: (timelineHeightPx || 500) + 'px' }"
+>
       <div
           v-for="item in sessionLayouts"
           :key="item.session.id"
@@ -36,26 +36,25 @@
 import type { Event } from '../stores/event'
 import { computed } from 'vue'
 import { useEventTimelineLayout } from '../composables/useEventTimelineLayout'
+import { toRef } from 'vue'
 
 const props = defineProps<{ event: Event }>()
 
-const {
-  timelineHeightPx,
-  hourCount,
-  hourIndexToY,
-  hourIndexToTime,
-  sessionToLayout
-} = useEventTimelineLayout(props.event, 80)
+
+const eventRef = toRef(props, 'event')
+
+const { timelineHeightPx, hourCount, hourIndexToY, hourIndexToTime, sessionToLayout } =
+    useEventTimelineLayout(eventRef, 80)
 
 const sessionLayouts = computed(() =>
-    props.event.sessions.map(session => {
-      const layout = sessionToLayout(session)
-      return {
-        session,
-        topPx: layout.topPx,
-        heightPx: layout.heightPx
-      }
-    })
+  eventRef.value.sessions.map(session => {
+    const layout = sessionToLayout(session)
+    return {
+      session,
+      topPx: layout.topPx,
+      heightPx: layout.heightPx
+    }
+  })
 )
 </script>
 
