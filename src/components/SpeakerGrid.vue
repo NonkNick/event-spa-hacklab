@@ -1,15 +1,18 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
-import { useSpeakerStore } from '../stores/speaker.ts'
 import { storeToRefs } from 'pinia'
+
+import { useSpeakerStore } from '../stores/speaker'
+import { useUserStore } from '../stores/user'
+
+import type { Speaker } from '../stores/speaker'
 
 import SpeakerCard from './SpeakerCard.vue'
 import AddSpeakerCard from './AddSpeakerCard.vue'
 import SpeakerFormModal from './SpeakerFormModal.vue'
-import type { Speaker } from '../stores/speaker.ts'
 
-const adminMode = ref(true)
-const isAdmin = computed(() => adminMode.value)
+const userStore = useUserStore()
+const isAdmin = computed(() => userStore.isCurrentUserAdmin)
 
 const speakerStore = useSpeakerStore()
 const { speakers } = storeToRefs(speakerStore)
@@ -32,11 +35,11 @@ const editSpeaker = (speaker: Speaker) => {
 }
 
 const deleteSpeaker = (id: string) => {
-	if (confirm('Weet je zeker dat je deze spreker wilt verwijderen?')) {
-		speakerStore.deleteSpeaker(id)
-	}
+	if (!confirm('Weet je zeker dat je deze spreker wilt verwijderen?')) return
+	speakerStore.deleteSpeaker(id)
 }
 </script>
+
 
 <template>
 	<section class="bg-[#FBF6EE] dark:bg-[#1F1D2B] py-16">
