@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import type { Speaker, SocialPlatform } from '../stores/speaker.ts'
+import { useUserStore } from '../stores/user.ts'
 
-const adminMode = ref(true)
-const isAdmin = computed(() => adminMode.value)
+const userStore = useUserStore()
+const isAdmin = computed(() => userStore.isCurrentUserAdmin)
 
 const props = defineProps<{
 	speaker: Speaker
