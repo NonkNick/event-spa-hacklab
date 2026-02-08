@@ -1,12 +1,14 @@
 import { defineStore } from 'pinia'
 
 /* ================= TYPES ================= */
+export type SessionType = "drinks" | "break" | "lecture";
 
 export interface Session {
   id: string
   title: string
   start: Date
   end: Date
+  type?: SessionType
   location: string
   speakerId?: string
 }
