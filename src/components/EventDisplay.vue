@@ -1,22 +1,19 @@
 <template>
-  <div class="relative h-full border-l border-gray-300">
-    <!-- hour lines -->
-    <div v-for="i in hourCount" :key="i" class="absolute left-0 right-0 border-t border-gray-200 text-xs text-gray-400"
-      :style="{ top: hourIndexToY(i - 1) + 'px' }">
-      {{ formatTime(hourIndexToTime(i - 1)) }}
-    </div>
+  <!-- hour lines -->
+  <div v-for="i in hourCount" :key="i"
+       class="border-t border-gray-200 text-xs text-gray-400"
+       :style="{ marginTop: i === 1 ? '0px' : hourIndexToY(i - 1) + 'px' }">
+    {{ formatTime(hourIndexToTime(i - 1)) }}
+  </div>
 
-    <!-- sessions -->
-    <div v-for="item in layout" :key="item.session.id"
-      class="absolute left-4 right-4 bg-orange-400 text-white rounded p-2 text-sm" :style="{
-        top: item.topPx + 'px',
-        height: item.heightPx + 'px'
-      }">
-      <div class="font-bold">{{ item.session.title }}</div>
-      <div class="text-xs opacity-90">
-        {{ formatTime(item.session.start) }} – {{ formatTime(item.session.end) }}
-      </div>
+  <!-- sessions -->
+  <div v-for="item in layout" :key="item.session.id"
+       class="bg-orange-400 text-white rounded p-2 text-sm my-2">
+    <div class="font-bold">{{ item.session.title }}</div>
+    <div class="text-xs opacity-90">
+      {{ formatTime(item.session.start) }} – {{ formatTime(item.session.end) }}
     </div>
+  </div>
 <!--    <div-->
 <!--        v-for="index in hourCount"-->
 <!--        :key="index"-->
@@ -35,7 +32,6 @@
 <!--          }}-->
 <!--        </span>-->
 <!--    </div>-->
-  </div>
 </template>
 
 <script setup lang="ts">
