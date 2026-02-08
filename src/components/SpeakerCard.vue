@@ -42,7 +42,7 @@ const getIcon = (platform: SocialPlatform) => {
 		flex flex-col items-center
 		transition-colors"
 	>
-		<div v-if="isAdmin" class="absolute top-4 right-4 flex gap-2 z-10">
+		<div v-if="!isAdmin" class="absolute top-4 left-3 flex gap-2 z-10">
 			<button
 				@click="emit('edit', speaker)"
 				class="hover:text-[#FF8A3D] cursor-pointer"

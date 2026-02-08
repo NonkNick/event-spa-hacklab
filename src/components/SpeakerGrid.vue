@@ -58,7 +58,7 @@ const deleteSpeaker = (id: string) => {
 					@delete="deleteSpeaker"
 				/>
 
-				<AddSpeakerCard v-if="isAdmin" @click="addSpeaker" class="cursor-pointer " />
+				<AddSpeakerCard v-if="!isAdmin" @click="addSpeaker" class="cursor-pointer " />
 			</div>
 		</div>
 

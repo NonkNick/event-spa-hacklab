@@ -2,6 +2,7 @@
 import { onMounted } from 'vue'
 import { ref } from 'vue'
 import SpeakerGrid from '../components/SpeakerGrid.vue'
+import EventGrid from '../components/EventGrid.vue'
 import TicketSidebar from '../components/TicketSidebar.vue'
 import { useTicketStore } from '../stores/ticket'
 import { useUserStore } from '../stores/user'
@@ -88,8 +89,8 @@ const buyTicket = (
 
 				<ul class="hidden md:flex
 					items-center gap-12 text-lg">
-					<RouterLink to="/#programma" class="hover:text-[#FF8A3D]">
-						Programma
+					<RouterLink to="/#events" class="hover:text-[#FF8A3D]">
+						Events
 					</RouterLink>
 					<RouterLink to="/#sprekers" class="hover:text-[#FF8A3D]">
 						Sprekers
@@ -118,8 +119,8 @@ const buyTicket = (
 				<ul class="flex flex-col text-center py-4 gap-0">
 					<li class="hover:text-[#FF8A3D] hover:bg-[#3A344C] dark:hover:bg-[#e7d6bc] py-3 cursor-pointer transition-colors"
 						@click="mobileMenuOpen = false">
-						<RouterLink to="/#programma" class="hover:text-[#FF8A3D]">
-							Programma
+						<RouterLink to="/#events" class="hover:text-[#FF8A3D]">
+							Events
 						</RouterLink>
 					</li>
 					<li class="hover:text-[#FF8A3D] hover:bg-[#3A344C] dark:hover:bg-[#e7d6bc] py-3 cursor-pointer transition-colors"
@@ -198,174 +199,8 @@ const buyTicket = (
 			</section>
 		</main>
 
-		<section id="programma" class="bg-[#E7D6BC] dark:bg-[#12111A]">
-			<div class="w-full max-w-6xl mx-auto mt-16 px-4">
-				<h2 class="text-4xl font-bold mb-8 text-center
-					text-[#3F3A56] dark:text-[#F3ECDD]">
-					Programma
-				</h2>
-
-				<div class="flex sm:flex-row gap-4 mb-5 items-center">
-					<select class="px-4 py-2 rounded-md
-						bg-white dark:bg-[#2A263A]
-						border border-[#3F3A56]/20 dark:border-[#F3ECDD]/20
-						text-[#3F3A56] dark:text-[#F3ECDD]
-						focus:outline-none focus:ring-2 focus:ring-[#FF8A3D] cursor-pointer">
-						<option>Alle zalen</option>
-						<option>Zaal A</option>
-						<option>Zaal B</option>
-						<option>Zaal C</option>
-					</select>
-
-					<select class="px-4 py-2 rounded-md
-						bg-white dark:bg-[#2A263A]
-						border border-[#3F3A56]/20 dark:border-[#F3ECDD]/20
-						text-[#3F3A56] dark:text-[#F3ECDD]
-						focus:outline-none focus:ring-2 focus:ring-[#FF8A3D] cursor-pointer">
-						<option>Alle tijden</option>
-						<option>09:00 – 10:00</option>
-						<option>10:00 – 11:00</option>
-						<option>11:00 – 12:00</option>
-					</select>
-				</div>
-
-				<hr class="w-full h-1 bg-[#FBF6EE] dark:bg-[#2A263A] mx-auto my-8 border-0 rounded-sm md:my-8">
-				</hr>
-
-				<div class="grid gap-6
-					sm:grid-cols-2
-					lg:grid-cols-3 pb-12">
-					<!-- Card -->
-					<div class="relative overflow-hidden
-						bg-white dark:bg-[#2A263A]
-						border border-[#3F3A56]/10 dark:border-[#F3ECDD]/10
-						rounded-lg shadow-md
-						transition-colors
-						flex flex-col h-full">
-						<div class="relative">
-							<img src="https://images.unsplash.com/photo-1518770660439-4636190af475"
-								class="h-55 w-full object-cover" />
-
-							<div class="absolute inset-0
-								bg-gradient-to-t
-								from-black/70 via-black/30 to-transparent"></div>
-
-							<div class="absolute bottom-4 left-4 right-4 text-left">
-								<h3 class="text-2xl font-bold text-white leading-tight">
-									Presentatie Hacklab
-								</h3>
-								<p class="text-base text-white/80">
-									Justin Bötger
-								</p>
-							</div>
-
-							<div class="absolute top-4 right-4
-								text-base font-semibold
-								bg-[#FF8A3D] text-white
-								px-3 py-1 rounded-full shadow">
-								09:00 – 09:30
-							</div>
-						</div>
-
-						<div class="p-6 text-left flex flex-col h-full">
-							<p class="text-base mb-4 text-[#6B647A] dark:text-[#D6CCE5]">
-								Start van de Hackfront Conference met een korte introductie en
-								overzicht van de dag.
-							</p>
-
-							<div class="mt-auto">
-								<ul class="text-base space-y-1">
-									<li>
-										<span class="font-bold">Locatie:</span> Zaal A
-									</li>
-									<li>
-										<span class="font-bold">Datum:</span> 25-10-2026
-									</li>
-									<li>
-										<span class="font-bold">Tijd:</span> 09:00 – 09:30
-									</li>
-								</ul>
-
-								<button
-									@click="buyTicket('presentatie-hacklab', 'Presentatie Hacklab', 10, 'Zaal A', '25-10-2026', '09:00 – 09:30')"
-									class="mt-6 w-full
-									bg-[#FF8A3D] hover:bg-[#E6752F]
-									text-white font-semibold
-									py-2 rounded-md
-									transition-colors cursor-pointer">
-									Tickets
-								</button>
-							</div>
-						</div>
-					</div>
-					<!-- Card END -->
-
-					<!-- Card -->
-					<div class="relative overflow-hidden
-						bg-white dark:bg-[#2A263A]
-						border border-[#3F3A56]/10 dark:border-[#F3ECDD]/10
-						rounded-lg shadow-md
-						transition-colors
-						flex flex-col h-full">
-						<div class="relative">
-							<img src="https://images.unsplash.com/photo-1625838144804-300f3907c110"
-								class="h-55 w-full object-cover" />
-
-							<div class="absolute inset-0
-								bg-gradient-to-t
-								from-black/70 via-black/30 to-transparent"></div>
-
-							<div class="absolute bottom-4 left-4 right-4 text-left">
-								<h3 class="text-2xl font-bold text-white leading-tight">
-									Hackathon
-								</h3>
-								<p class="text-base text-white/80">
-									Justin Bötger
-								</p>
-							</div>
-
-							<div class="absolute top-4 right-4
-								text-base font-semibold
-								bg-[#FF8A3D] text-white
-								px-3 py-1 rounded-full shadow">
-								11:00 – 15:30
-							</div>
-						</div>
-
-						<div class="p-6 text-left flex flex-col h-full">
-							<p class="text-base mb-4 text-[#6B647A] dark:text-[#D6CCE5]">
-								Een hackathon is een evenement waarin teams van deelnemers non-stop bezig gaan om binnen
-								een korte tijd oplossingen voor aangereikte casussen te bedenken.
-							</p>
-
-							<div class="mt-auto">
-								<ul class="text-base space-y-1">
-									<li>
-										<span class="font-bold">Locatie:</span> Zaal C
-									</li>
-									<li>
-										<span class="font-bold">Datum:</span> 15-3-2026
-									</li>
-									<li>
-										<span class="font-bold">Tijd:</span> 11:00 – 15:30
-									</li>
-								</ul>
-
-								<button
-									@click="buyTicket('hackathon', 'Hackathon', 25, 'Zaal C', '15-3-2026', '11:00 – 15:30')"
-									class="mt-6 w-full
-									bg-[#FF8A3D] hover:bg-[#E6752F]
-									text-white font-semibold
-									py-2 rounded-md
-									transition-colors cursor-pointer">
-									Tickets
-								</button>
-							</div>
-						</div>
-					</div>
-					<!-- Card END -->
-				</div>
-			</div>
+		<section id="events" class="bg-[#FBF6EE] dark:bg-[#1F1D2B]">
+			<EventGrid />
 		</section>
 
 		<section id="sprekers" class="bg-[#FBF6EE] dark:bg-[#1F1D2B]">
