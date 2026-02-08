@@ -1,71 +1,102 @@
-import { computed } from 'vue'
-import type { Event, Session } from '../stores/event'
+import { computed, type Ref } from "vue";
+import type { Event, Session } from "../stores/event";
 
-export function useEventTimelineLayout(
-    event: Event,
-    pixelsPerHour = 80
-) {
+function toDate(value: Date | string): Date {
+	return value instanceof Date ? value : new Date(value);
+}
 
-    const timelineStartAt = computed(() => {
-        const starts = event.sessions.map(s => s.start.getTime())
-        const earliest = new Date(Math.min(...starts))
-        earliest.setMinutes(0, 0, 0) // round down to the hour
-        return earliest
-    })
+export function useEventTimelineLayout(event: Ref<Event>, pixelsPerHour = 80) {
+	const timelineStartAt = computed(() => {
+		if (!event.value.sessions.length) return new Date();
 
-    const timelineEndAt = computed(() => {
-        const ends = event.sessions.map(s => s.end.getTime())
-        const latest = new Date(Math.max(...ends))
+		const startTimes = event.value.sessions.map((s) =>
+			toDate(s.start).getTime(),
+		);
 
-        if (latest.getTime() % (1000 * 60 * 60) !== 0) {
-            latest.setHours(latest.getHours() + 1)
-        }
-        latest.setMinutes(0, 0, 0)
+		const earliest = new Date(Math.min(...startTimes));
+		earliest.setMinutes(0, 0, 0);
+		return earliest;
+	});
 
-        return latest
-    })
+	const timelineEndAt = computed(() => {
+		if (!event.value.sessions.length) {
+			return new Date(Date.now() + 60 * 60 * 1000);
+		}
 
-    const timelineDurationHours = computed(() => {
-        return (
-            (timelineEndAt.value.getTime() - timelineStartAt.value.getTime()) /
-            (1000 * 60 * 60)
-        )
-    })
+		const endTimes = event.value.sessions.map((s) =>
+			toDate(s.end).getTime(),
+		);
 
-    const timelineHeightPx = computed(() => {
-        return timelineDurationHours.value * pixelsPerHour
-    })
+		const latest = new Date(Math.max(...endTimes));
 
-    const hourCount = computed(() => Math.ceil(timelineDurationHours.value))
+		if (latest.getMinutes() > 0 || latest.getSeconds() > 0) {
+			latest.setHours(latest.getHours() + 1);
+		}
 
-    const hourIndexToY = (hourIndex: number) => hourIndex * pixelsPerHour
+		latest.setMinutes(0, 0, 0);
+		return latest;
+	});
 
-    const hourIndexToTime = (hourIndex: number) => {
-        const date = new Date(timelineStartAt.value)
-        date.setHours(date.getHours() + hourIndex)
-        return date
-    }
+	const timelineDurationHours = computed(() => {
+		if (!event.value.sessions.length) return 1;
 
-    const sessionToLayout = (session: Session) => {
-        const minutesFromStart =
-            (session.start.getTime() - timelineStartAt.value.getTime()) / 60000
-        const durationMinutes =
-            (session.end.getTime() - session.start.getTime()) / 60000
+		const startTimes = event.value.sessions.map((s) =>
+			toDate(s.start).getTime(),
+		);
+		const endTimes = event.value.sessions.map((s) =>
+			toDate(s.end).getTime(),
+		);
 
-        const topPx = Math.max(0, (minutesFromStart / 60) * pixelsPerHour)
-        const heightPx = Math.max(0, (durationMinutes / 60) * pixelsPerHour)
+		const earliest = new Date(Math.min(...startTimes));
+		earliest.setMinutes(0, 0, 0);
 
-        return { topPx, heightPx }
-    }
+		const latest = new Date(Math.max(...endTimes));
+		if (latest.getMinutes() > 0 || latest.getSeconds() > 0) {
+			latest.setHours(latest.getHours() + 1);
+		}
+		latest.setMinutes(0, 0, 0);
 
-    return {
-        timelineStartAt,
-        timelineEndAt,
-        timelineDurationHours,
-        timelineHeightPx,
-        hourCount,
-        hourIndexToY,
-        hourIndexToTime,
-        sessionToLayout
-    }
+		return (latest.getTime() - earliest.getTime()) / (1000 * 60 * 60);
+	});
+
+	const timelineHeightPx = computed(
+		() => timelineDurationHours.value * pixelsPerHour,
+	);
+
+	const hourCount = computed(() => Math.ceil(timelineDurationHours.value));
+
+	const hourIndexToY = (hourIndex: number) => hourIndex * pixelsPerHour;
+
+	const hourIndexToTime = (hourIndex: number) => {
+		const date = new Date(timelineStartAt.value);
+		date.setHours(date.getHours() + hourIndex);
+		return date;
+	};
+
+	const sessionToLayout = (session: Session) => {
+		const start = toDate(session.start);
+		const end = toDate(session.end);
+
+		const minutesFromStart =
+			(start.getTime() - timelineStartAt.value.getTime()) / 60000;
+
+		const durationMinutes = (end.getTime() - start.getTime()) / 60000;
+
+		const topPx = Math.max(0, (minutesFromStart / 60) * pixelsPerHour);
+
+		const heightPx = Math.max(0, (durationMinutes / 60) * pixelsPerHour);
+
+		return { topPx, heightPx };
+	};
+
+	return {
+		timelineStartAt,
+		timelineEndAt,
+		timelineDurationHours,
+		timelineHeightPx,
+		hourCount,
+		hourIndexToY,
+		hourIndexToTime,
+		sessionToLayout,
+	};
 }
