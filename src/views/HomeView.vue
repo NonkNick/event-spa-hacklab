@@ -305,11 +305,12 @@ const demoEvent: Event = {
 					</div>
 				</div>
 			</section>
-		</main>
+		
 
      <!-- PROGRAMMA -->
     <section id="programma" class="bg-[#FBF6EE] dark:bg-[#1F1D2B] py-16">
   <div class="max-w-6xl mx-auto px-4">
+    
 
     <h2 class="text-4xl font-bold mb-10 text-center">
       Programma
@@ -385,6 +386,7 @@ const demoEvent: Event = {
 		<section id="sprekers" class="bg-[#FBF6EE] dark:bg-[#1F1D2B]">
 			<SpeakerGrid />
 		</section>
+    </main>
 
     <footer class="w-full py-6
                bg-[#3F3A56] dark:bg-[#2C2740]
