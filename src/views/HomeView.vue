@@ -307,10 +307,9 @@ const demoEvent: Event = {
 			</section>
 		
 
-     <!-- PROGRAMMA -->
+   <!-- PROGRAMMA -->
     <section id="programma" class="bg-[#FBF6EE] dark:bg-[#1F1D2B] py-16">
   <div class="max-w-6xl mx-auto px-4">
-    
 
     <h2 class="text-4xl font-bold mb-10 text-center">
       Programma
@@ -327,19 +326,7 @@ const demoEvent: Event = {
     </div>
   </div>
 
-   <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-  <div
-    v-for="event in events"
-    :key="event.id"
-    class="bg-white dark:bg-[#2A263A]
-           border border-[#3F3A56]/10 dark:border-[#F3ECDD]/10
-           rounded-xl shadow-md
-           transition-colors
-           flex flex-col"
-  >
-
-  </div>
-</div>
+ 
 <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
   <div
     v-for="event in events"
