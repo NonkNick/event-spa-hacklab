@@ -7,10 +7,11 @@
 			text-[#FF8A3D]
 			hover:bg-[#FF8A3D] hover:text-[#3F3A56]
 			transition-colors duration-300
-			relative"
+			relative
+			text-xl font-semibold"
 			aria-label="Tickets"
 		>
-			🎟️
+			☰
 			<span
 				v-if="userTickets.length > 0"
 				class="absolute -top-1 -right-1

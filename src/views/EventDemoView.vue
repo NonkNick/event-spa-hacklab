@@ -52,7 +52,7 @@ const demoEvent: Event = {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-red-200 to-indigo-100 flex flex-col">
+  <div class="min-h-screen bg-linear-to-br from-red-200 to-indigo-100 flex flex-col">
     <!-- Header -->
     <header class="bg-white shadow-sm">
       <div class="max-w-7xl mx-auto px-4 py-6">

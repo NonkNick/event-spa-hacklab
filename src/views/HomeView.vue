@@ -143,7 +143,7 @@ const buyTicket = (
 						class="absolute inset-0 w-full h-full object-cover" />
 
 					<div class="absolute inset-0
-						bg-gradient-to-t
+						bg-linear-to-t
 						from-black/80 via-black/40 to-transparent"></div>
 
 					<div class="absolute bottom-6 left-6 right-6 text-left">
@@ -247,7 +247,7 @@ const buyTicket = (
 								class="h-55 w-full object-cover" />
 
 							<div class="absolute inset-0
-								bg-gradient-to-t
+								bg-linear-to-t
 								from-black/70 via-black/30 to-transparent"></div>
 
 							<div class="absolute bottom-4 left-4 right-4 text-left">
@@ -312,7 +312,7 @@ const buyTicket = (
 								class="h-55 w-full object-cover" />
 
 							<div class="absolute inset-0
-								bg-gradient-to-t
+								bg-linear-to-t
 								from-black/70 via-black/30 to-transparent"></div>
 
 							<div class="absolute bottom-4 left-4 right-4 text-left">
