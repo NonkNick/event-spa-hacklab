@@ -1,11 +1,16 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import {onMounted} from 'vue'
 import { ref } from 'vue'
 import SpeakerGrid from '../components/SpeakerGrid.vue'
 import TicketSidebar from '../components/TicketSidebar.vue'
 import { useTicketStore } from '../stores/ticket'
 import { useUserStore } from '../stores/user'
+import DevUserSwitch from "../components/DevUserSwitch.vue";
+import EventDisplay from "../components/EventDisplay.vue";
+import type {Event} from "../stores/event.ts";
+import AddUserForm from "../components/addUserForm.vue";
 
+const showAddUserForm = ref(false)
 const mobileMenuOpen = ref(false)
 const ticketStore = useTicketStore()
 const userStore = useUserStore()
@@ -13,6 +18,57 @@ const userStore = useUserStore()
 const toggleMobileMenu = () => {
 	mobileMenuOpen.value = !mobileMenuOpen.value
 }
+
+const toggleAddUserForm = () => {
+  showAddUserForm.value = !showAddUserForm.value
+}
+const demoEvent: Event = {
+  id: 'evt-001',
+  name: 'Vue.js Conference 2024',
+  maxAttendees: 250,
+  sessions: [
+    {
+      id: 'ses-001',
+      start: new Date('2024-07-15T09:00:00'),
+      end: new Date('2024-07-15T10:30:00'),
+      speakerId: 'spk-001',
+      type: 'lecture',
+      location: 'Main Hall',
+      title: 'Introduction to Vue 3 Composition API',
+      description: 'Learn the fundamentals of Vue 3 Composition API and how to build modern applications.'
+    },
+    {
+      id: 'ses-002',
+      start: new Date('2024-07-15T10:30:00'),
+      end: new Date('2024-07-15T11:00:00'),
+      speakerId: 'spk-002',
+      type: 'break',
+      location: 'Lobby',
+      title: 'Coffee Break',
+      description: 'Network with other attendees and grab some refreshments.'
+    },
+    {
+      id: 'ses-003',
+      start: new Date('2024-07-15T11:00:00'),
+      end: new Date('2024-07-15T12:30:00'),
+      speakerId: 'spk-003',
+      type: 'lecture',
+      location: 'Room A',
+      title: 'Advanced State Management with Pinia',
+      description: 'Deep dive into Pinia store patterns and best practices for large applications.'
+    },
+    {
+      id: 'ses-004',
+      start: new Date('2024-07-15T18:00:00'),
+      end: new Date('2024-07-15T20:00:00'),
+      speakerId: 'spk-004',
+      type: 'drinks',
+      location: 'Rooftop Bar',
+      title: 'Networking Drinks',
+      description: 'Unwind with fellow developers and speakers over drinks and appetizers.'
+    }
+  ]
+};
 
 onMounted(() => {
 	if (
@@ -25,14 +81,14 @@ onMounted(() => {
 		document.documentElement.classList.remove('dark')
 	}
 
-	if (!userStore.currentUser) {
-		userStore.setCurrentUser({
-			id: 'demo-user',
-			name: 'Demo User',
-			email: 'demo@example.com',
-			isAdmin: false
-		})
-	}
+	// if (!userStore.currentUser) {
+	// 	userStore.setCurrentUser({
+	// 		id: 'demo-user',
+	// 		name: 'Demo User',
+	// 		email: 'demo@example.com',
+	// 		isAdmin: false
+	// 	})
+	// }
 })
 
 const toggleDarkMode = () => {
@@ -70,67 +126,102 @@ const buyTicket = (
 		bg-[#FBF6EE] dark:bg-[#1F1D2B]
 		text-[#3F3A56] dark:text-[#F3ECDD]
 		transition-colors duration-300">
-		<nav class="w-full
-			bg-[#e7d6bc] dark:bg-[#3A344C]
-			text-[#3F3A56] dark:text-[#F3ECDD]
-			shadow-md">
-			<div class="flex items-center justify-between
-				px-4 md:px-6 py-4">
-				<div class="flex items-center">
-					<a href="/" class="flex items-center">
-						<img src="../assets/images/eventlab-logo.png" alt="Logo"
-							class="h-10 w-10 md:h-12 md:w-12 mr-3" />
-						<div class="font-bold text-xl md:text-2xl">
-							EventLab
-						</div>
-					</a>
-				</div>
+    <nav class="w-full
+      bg-[#e7d6bc] dark:bg-[#3A344C]
+      text-[#3F3A56] dark:text-[#F3ECDD]
+      shadow-md">
+      <div class="flex items-center justify-between px-4 md:px-6 py-4">
 
-				<ul class="hidden md:flex
-					items-center gap-12 text-lg">
-					<RouterLink to="/#programma" class="hover:text-[#FF8A3D]">
-						Programma
-					</RouterLink>
-					<RouterLink to="/#sprekers" class="hover:text-[#FF8A3D]">
-						Sprekers
-					</RouterLink>
-				</ul>
+        <!-- Logo -->
+        <div class="flex items-center">
+          <a href="/" class="flex items-center">
+            <img src="../assets/images/eventlab-logo.png" alt="Logo"
+                 class="h-10 w-10 md:h-12 md:w-12 mr-3" />
+            <div class="font-bold text-xl md:text-2xl">
+              EventLab
+            </div>
+          </a>
+        </div>
 
-				<div class="flex items-center gap-4">
-					<button @click="toggleDarkMode" class="py-1 px-3 rounded
-						text-[#FF8A3D]
-						hover:bg-[#FF8A3D] hover:text-[#3F3A56]
-						transition-colors duration-300 cursor-pointer">
-						🌙 / ☀️
-					</button>
+        <!-- Desktop Menu -->
+        <ul class="hidden md:flex items-center gap-12 text-lg">
+          <RouterLink to="/#programma" class="hover:text-[#FF8A3D]">
+            Programma
+          </RouterLink>
+          <RouterLink to="/#sprekers" class="hover:text-[#FF8A3D]">
+            Sprekers
+          </RouterLink>
+        </ul>
 
-					<TicketSidebar />
+        <div class="flex items-center gap-4 relative">
 
-					<button @click="toggleMobileMenu" class="md:hidden text-2xl" aria-label="Menu">
-						☰
-					</button>
-				</div>
-			</div>
+          <!-- Dark Mode Toggle -->
+          <button @click="toggleDarkMode" class="py-1 px-3 rounded
+            text-[#FF8A3D]
+            hover:bg-[#FF8A3D] hover:text-[#3F3A56]
+            transition-colors duration-300 cursor-pointer">
+            🌙 / ☀️
+          </button>
 
-			<div v-if="mobileMenuOpen" class="md:hidden
-				bg-[#e7d6bc] dark:bg-[#3A344C]
-				border-t border-[#3F3A56]/10">
-				<ul class="flex flex-col text-center py-4 gap-0">
-					<li class="hover:text-[#FF8A3D] hover:bg-[#3A344C] dark:hover:bg-[#e7d6bc] py-3 cursor-pointer transition-colors"
-						@click="mobileMenuOpen = false">
-						<RouterLink to="/#programma" class="hover:text-[#FF8A3D]">
-							Programma
-						</RouterLink>
-					</li>
-					<li class="hover:text-[#FF8A3D] hover:bg-[#3A344C] dark:hover:bg-[#e7d6bc] py-3 cursor-pointer transition-colors"
-						@click="mobileMenuOpen = false">
-						<RouterLink to="/#sprekers" class="hover:text-[#FF8A3D]">
-							Sprekers
-						</RouterLink>
-					</li>
-				</ul>
-			</div>
-		</nav>
+          <!-- Add User Button -->
+          <div class="relative">
+            <button
+                @click="toggleAddUserForm"
+                class="py-1 px-3 rounded bg-[#FF8A3D] text-white
+                     hover:bg-[#E6752F] transition-colors">
+              Add User
+            </button>
+
+            <div
+                v-if="showAddUserForm"
+                class="absolute right-0 mt-2 z-50">
+              <AddUserForm @created="showAddUserForm = false" />
+            </div>
+          </div>
+
+          <!-- Ticket Sidebar -->
+          <TicketSidebar />
+
+          <!-- Mobile Menu Toggle -->
+          <button @click="toggleMobileMenu" class="md:hidden text-2xl" aria-label="Menu">
+            ☰
+          </button>
+
+        </div>
+      </div>
+
+      <!-- MOBILE MENU -->
+      <div v-if="mobileMenuOpen" class="md:hidden
+        bg-[#e7d6bc] dark:bg-[#3A344C]
+        border-t border-[#3F3A56]/10">
+        <ul class="flex flex-col text-center py-4 gap-0">
+          <li class="hover:text-[#FF8A3D] hover:bg-[#3A344C] dark:hover:bg-[#e7d6bc] py-3 cursor-pointer transition-colors"
+              @click="mobileMenuOpen = false">
+            <RouterLink to="/#programma" class="hover:text-[#FF8A3D]">
+              Programma
+            </RouterLink>
+          </li>
+          <li class="hover:text-[#FF8A3D] hover:bg-[#3A344C] dark:hover:bg-[#e7d6bc] py-3 cursor-pointer transition-colors"
+              @click="mobileMenuOpen = false">
+            <RouterLink to="/#sprekers" class="hover:text-[#FF8A3D]">
+              Sprekers
+            </RouterLink>
+          </li>
+          <li class="py-3">
+            <button
+                @click="toggleAddUserForm"
+                class="w-full py-2 px-4 rounded bg-[#FF8A3D] text-white hover:bg-[#E6752F] transition-colors">
+              Add User
+            </button>
+          </li>
+        </ul>
+
+        <!-- Mobile popover -->
+        <div v-if="showAddUserForm" id="add-user-popover" class="p-4 bg-white dark:bg-[#2A263A] rounded-lg shadow-lg mt-2">
+          <AddUserForm @created="showAddUserForm = false" />
+        </div>
+      </div>
+    </nav>
 
 		<main class="flex-1 flex flex-col items-center text-center gap-8 py-12 px-4
 			bg-[#FBF6EE] dark:bg-[#1F1D2B]">
@@ -363,6 +454,10 @@ const buyTicket = (
 							</div>
 						</div>
 					</div>
+
+          <div class="relative w-80 h-100 overflow-y-auto overflow-x-hidden">
+            <EventDisplay :event="demoEvent" />
+          </div>
 					<!-- Card END -->
 				</div>
 			</div>
@@ -372,10 +467,23 @@ const buyTicket = (
 			<SpeakerGrid />
 		</section>
 
-		<footer class="w-full py-6 text-center
-			bg-[#3F3A56] dark:bg-[#2C2740]
-			text-[#FFF]">
-			© 2026 EventLab
-		</footer>
+    <footer class="w-full py-6
+               bg-[#3F3A56] dark:bg-[#2C2740]
+               text-white
+               relative
+               transition-colors">
+
+      <!-- Dev Switch (floating above content, small) -->
+      <div class="absolute top-2 right-4 md:top-3 md:right-6">
+        <DevUserSwitch />
+      </div>
+
+      <!-- Centered copyright -->
+      <div class="text-center text-sm md:text-base">
+        © 2026 EventLab
+      </div>
+    </footer>
+
+
 	</div>
 </template>
