@@ -5,6 +5,7 @@ export interface Ticket {
 	eventId: string;
 	userId: string;
 	name: string;
+	ticketType?: string;
 	price: number;
 	location?: string;
 	eventDate?: string;
@@ -16,7 +17,15 @@ export const useTicketStore = defineStore("ticket", {
 	state: () => ({
 		tickets: [] as Ticket[],
 	}),
-	persist: true,
+	persist: {
+		serializer: {
+			deserialize: (value) => JSON.parse(value, (key, val) => {
+				if (key === 'createdAt') return new Date(val);
+				return val;
+			}),
+			serialize: JSON.stringify,
+		},
+	},
 
 	getters: {
 		getTicketById: (state) => (id: string) => {

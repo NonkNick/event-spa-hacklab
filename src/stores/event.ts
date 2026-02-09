@@ -2,15 +2,34 @@ import { defineStore } from "pinia";
 
 export type SessionType = "drinks" | "break" | "lecture";
 
+export const DEFAULT_TICKET_TYPES: TicketType[] = [
+    {
+        name: "Normal",
+        price: 25,
+        description: "Standaard toegang tot het evenement"
+    },
+    {
+        name: "VIP",
+        price: 75,
+        description: "VIP toegang met extra voorzieningen"
+    }
+];
+
 export interface Session {
-	id: string;
-	start: Date;
-	end: Date;
-	speakerId: string;
-	type: SessionType;
-	location: string;
-	title: string;
-	description: string;
+    id: string;
+    start: Date;
+    end: Date;
+    speakerId: string;
+    type: SessionType;
+    location: string;
+    title: string;
+    description: string;
+}
+
+export interface TicketType {
+    name: string;
+    price: number;
+    description?: string;
 }
 
 export interface Event {
@@ -18,13 +37,22 @@ export interface Event {
 	name: string;
 	maxAttendees: number;
 	sessions: Session[];
+    ticketTypes: TicketType[];
 }
 
 export const useEventStore = defineStore("event", {
 	state: () => ({
 		events: [] as Event[],
 	}),
-	persist: true,
+	persist: {
+		serializer: {
+			deserialize: (value) => JSON.parse(value, (key, val) => {
+				if (['start', 'end'].includes(key)) return new Date(val);
+				return val;
+			}),
+			serialize: JSON.stringify,
+		},
+	},
 
 	getters: {
 		getEventById: (state) => (id: string) => {

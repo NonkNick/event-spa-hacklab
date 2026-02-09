@@ -12,6 +12,7 @@ export const useUserStore = defineStore('user', {
         users: [] as User[],
         currentUser: null as User | null
     }),
+    persist: true,
 
     getters: {
         getUserById: (state) => (id: string) => {

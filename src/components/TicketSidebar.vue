@@ -10,7 +10,7 @@
 			relative"
 			aria-label="Tickets"
 		>
-			🎟️
+			<TicketIcon class="h-6 w-6" />
 			<span
 				v-if="userTickets.length > 0"
 				class="absolute -top-1 -right-1
@@ -72,7 +72,7 @@
 						transition-colors"
 						aria-label="Sluit sidebar"
 					>
-						✕
+						<XMarkIcon class="h-6 w-6" />
 					</button>
 				</div>
 
@@ -95,10 +95,16 @@
 							<button
 								@click="showTickets = !showTickets"
 								class="text-sm text-[#3F3A56] dark:text-[#F3ECDD]
-								hover:text-[#FF8A3D] transition-colors"
+								hover:text-[#FF8A3D] transition-colors flex items-center gap-1"
 							>
-								<span v-if="showTickets">Verbergen ▴</span>
-								<span v-else>Toon ▾ ({{ userTickets.length }})</span>
+								<template v-if="showTickets">
+                  Verbergen
+                  <ChevronUpIcon class="h-4 w-4" />
+                </template>
+								<template v-else>
+                  Toon ({{ userTickets.length }})
+                  <ChevronDownIcon class="h-4 w-4" />
+                </template>
 							</button>
 						</div>
 
@@ -113,9 +119,14 @@
 									transition-colors"
 								>
 									<div class="flex items-start justify-between mb-2">
-										<h4 class="font-bold text-[#3F3A56] dark:text-[#F3ECDD]">
-											{{ ticket.name }}
-										</h4>
+										<div>
+											<h4 class="font-bold text-[#3F3A56] dark:text-[#F3ECDD]">
+												{{ ticket.name }}
+											</h4>
+											<p v-if="ticket.ticketType" class="text-xs text-[#6B647A] dark:text-[#D6CCE5]">
+												{{ ticket.ticketType }}
+											</p>
+										</div>
 										<span
 											class="bg-[#FF8A3D] text-white
 											text-xs font-semibold
@@ -145,6 +156,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { TicketIcon, XMarkIcon, ChevronUpIcon, ChevronDownIcon } from '@heroicons/vue/24/solid'
 import { useUserStore } from '../stores/user'
 import { useTicketStore } from '../stores/ticket'
 
