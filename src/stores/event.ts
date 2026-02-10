@@ -1,160 +1,84 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
 
-/* ================= TYPES ================= */
 export type SessionType = "drinks" | "break" | "lecture";
 
+export const DEFAULT_TICKET_TYPES: TicketType[] = [
+    {
+        name: "Normal",
+        price: 25,
+        description: "Standaard toegang tot het evenement"
+    },
+    {
+        name: "VIP",
+        price: 75,
+        description: "VIP toegang met extra voorzieningen"
+    }
+];
+
 export interface Session {
-  id: string
-  title: string
-  start: Date
-  end: Date
-  type?: SessionType
-  location: string
-  speakerId?: string
+    id: string;
+    start: Date;
+    end: Date;
+    speakerId: string;
+    type: SessionType;
+    location: string;
+    title: string;
+    description: string;
 }
 
 export interface TicketType {
-  id: string
-  name: 'VIP' | 'REGULAR'
-  price: number
-  amount: number
+    name: string;
+    price: number;
+    description?: string;
 }
 
 export interface Event {
-  id: string
-  name: string
-  maxAttendees: number
-  sessions: Session[]
-  tickets: TicketType[]
+	id: string;
+	name: string;
+	maxAttendees: number;
+	sessions: Session[];
+    ticketTypes: TicketType[];
 }
 
-/* ================= STORE ================= */
+export const useEventStore = defineStore("event", {
+	state: () => ({
+		events: [] as Event[],
+	}),
+	persist: {
+		serializer: {
+			deserialize: (value) => JSON.parse(value, (key, val) => {
+				if (['start', 'end'].includes(key)) return new Date(val);
+				return val;
+			}),
+			serialize: JSON.stringify,
+		},
+	},
 
-export const useEventStore = defineStore('event', {
-  state: () => ({
-    events: [] as Event[]
-  }),
+	getters: {
+		getEventById: (state) => (id: string) => {
+			return state.events.find((event) => event.id === id);
+		},
 
-  actions: {
-    /* ---------- MOCK DATA ---------- */
+		getAllEvents: (state) => state.events,
+	},
 
-    seedMockEvents() {
-      if (this.events.length) return
+	actions: {
+		addEvent(event: Event) {
+			this.events.push(event);
+		},
 
-      this.events.push({
-        id: crypto.randomUUID(),
-        name: 'Hackfront Conference 2026',
-        maxAttendees: 150,
-        sessions: [
-          {
-            id: crypto.randomUUID(),
-            title: 'Opening Keynote',
-            start: new Date('2026-10-25T09:00'),
-            end: new Date('2026-10-25T10:00'),
-            location: 'Zaal A'
-          }
-        ],
-        tickets: [
-          {
-            id: crypto.randomUUID(),
-            name: 'REGULAR',
-            price: 10,
-            amount: 100
-          }
-        ]
-      })
-    },
+		updateEvent(id: string, updatedEvent: Partial<Event>) {
+			const index = this.events.findIndex((e) => e.id === id);
+			if (index !== -1) {
+				this.events[index] = {
+					...this.events[index],
+					...updatedEvent,
+				} as Event;
+			}
+		},
 
-    /* ---------- EVENTS ---------- */
-
-    addEvent(event: Event) {
-      this.events.push(event)
-    },
-
-    deleteEvent(eventId: string) {
-      this.events = this.events.filter(e => e.id !== eventId)
-    },
-
-    updateEvent(eventId: string, updated: Partial<Omit<Event, 'id'>>) {
-      const event = this.events.find(e => e.id === eventId)
-      if (!event) return
-      Object.assign(event, updated)
-    },
-
-    /* ---------- SESSIONS ---------- */
-
-    addSession(eventId: string, session: Session) {
-      const event = this.events.find(e => e.id === eventId)
-      if (!event) return
-
-      event.sessions.push(normalizeSession(session))
-    },
-
-    deleteSession(eventId: string, sessionId: string) {
-      const event = this.events.find(e => e.id === eventId)
-      if (!event) return
-
-      event.sessions = event.sessions.filter(s => s.id !== sessionId)
-    },
-
-    updateSession(
-      eventId: string,
-      sessionId: string,
-      updated: Partial<Session>
-    ) {
-      const event = this.events.find(e => e.id === eventId)
-      if (!event) return
-
-      const session = event.sessions.find(s => s.id === sessionId)
-      if (!session) return
-
-      Object.assign(session, {
-        ...updated,
-        ...(updated.start && { start: new Date(updated.start) }),
-        ...(updated.end && { end: new Date(updated.end) })
-      })
-    },
-
-    /* ---------- TICKETS ---------- */
-
-    addTicket(eventId: string, ticket: TicketType) {
-      const event = this.events.find(e => e.id === eventId)
-      if (!event) return
-
-      event.tickets.push(ticket)
-    },
-
-    deleteTicket(eventId: string, ticketId: string) {
-      const event = this.events.find(e => e.id === eventId)
-      if (!event) return
-
-      event.tickets = event.tickets.filter(t => t.id !== ticketId)
-    },
-
-    updateTicket(
-      eventId: string,
-      ticketId: string,
-      updated: Partial<TicketType>
-    ) {
-      const event = this.events.find(e => e.id === eventId)
-      if (!event) return
-
-      const ticket = event.tickets.find(t => t.id === ticketId)
-      if (!ticket) return
-
-      Object.assign(ticket, updated)
-    }
-  },
-
-  persist: true
-})
-
-/* ================= HELPERS ================= */
-
-function normalizeSession(session: Session): Session {
-  return {
-    ...session,
-    start: new Date(session.start),
-    end: new Date(session.end)
-  }
-}
+		deleteEvent(id: string) {
+			this.events = this.events.filter((e) => e.id !== id);
+		},
+	},
+});

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useEventStore, type Event } from '../stores/event.ts'
+import { useEventStore, type Event, DEFAULT_TICKET_TYPES } from '../stores/event.ts'
+
 
 const eventStore = useEventStore()
 
@@ -8,7 +9,8 @@ const form = ref<Event>({
   id: crypto.randomUUID(), // uniek id
   name: '',
   maxAttendees: 0,
-  sessions: []
+  sessions: [],
+  ticketTypes: [...DEFAULT_TICKET_TYPES]
 })
 
 function submitForm() {
@@ -19,7 +21,8 @@ function submitForm() {
     id: crypto.randomUUID(),
     name: '',
     maxAttendees: 0,
-    sessions: []
+    sessions: [],
+    ticketTypes: [...DEFAULT_TICKET_TYPES]
   }
 
   alert('Event toegevoegd!')
