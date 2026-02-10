@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { MoonIcon, SunIcon, ShoppingCartIcon, Bars3Icon } from '@heroicons/vue/24/solid'
 import {onMounted} from 'vue'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import SpeakerGrid from '../components/SpeakerGrid.vue'
 import TicketSidebar from '../components/TicketSidebar.vue'
 import { useTicketStore } from '../stores/ticket'
@@ -15,6 +15,7 @@ import { useSidebar } from '../composables/useSidebar'
 import Sidebar from '../components/Sidebar.vue'
 import ShoppingCart from '../components/ShoppingCart.vue'
 import TicketSelector from '../components/TicketSelector.vue'
+import TestAdmin from '../views/TestAdmin.vue'
 
 
 const { toggleSidebar, openSidebar } = useSidebar()
@@ -22,16 +23,18 @@ const showAddUserForm = ref(false)
 const mobileMenuOpen = ref(false)
 const isDarkMode = ref(false)
 const activeTicketSelector = ref<string | null>(null)
+const selectedEventId = ref<string | null>(null)
 const ticketStore = useTicketStore()
 const userStore = useUserStore()
 const eventStore = useEventStore()
 const { addToCart, isEmpty, getTotalItems, purchase } = useShoppingCart()
 
+const events = computed(() => eventStore.events)
+
 const handlePurchase = () => {
   purchase()
   // Maybe show a success message or redirect, but let's keep it simple as requested
 }
-
 
 const toggleMobileMenu = () => {
   mobileMenuOpen.value = !mobileMenuOpen.value
@@ -39,6 +42,21 @@ const toggleMobileMenu = () => {
 
 const toggleAddUserForm = () => {
   showAddUserForm.value = !showAddUserForm.value
+}
+
+const openAdmin = (eventId: string) => {
+  selectedEventId.value = eventId
+}
+
+const closeAdmin = () => {
+  selectedEventId.value = null
+}
+
+const formatTime = (value: string | Date) => {
+  if (!value) return ''
+  const date = typeof value === 'string' ? new Date(value) : value
+  if (isNaN(date.getTime())) return ''
+  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 }
 
 const demoEvent: Event = {
@@ -122,7 +140,7 @@ const buyTicket = (eventId: string, ticketType: TicketType) => {
     eventId,
     ticketType
   })
-  
+
   // Open sidebar when adding to cart
   openSidebar()
   activeTicketSelector.value = null
@@ -168,7 +186,7 @@ const buyTicket = (eventId: string, ticketType: TicketType) => {
             text-[#FF8A3D]
             hover:bg-[#FF8A3D] hover:text-[#3F3A56]
             transition-colors duration-300 cursor-pointer"
-            aria-label="Toggle dark mode">
+                  aria-label="Toggle dark mode">
             <MoonIcon v-if="!isDarkMode" class="h-6 w-6" />
             <SunIcon v-else class="h-6 w-6" />
           </button>
@@ -196,7 +214,7 @@ const buyTicket = (eventId: string, ticketType: TicketType) => {
             hover:bg-[#FF8A3D] hover:text-[#3F3A56]
             transition-colors duration-300 cursor-pointer
             relative"
-            aria-label="Winkelwagen">
+                  aria-label="Winkelwagen">
             <ShoppingCartIcon class="h-6 w-6" />
             <span
                 v-if="!isEmpty()"
@@ -314,10 +332,10 @@ const buyTicket = (eventId: string, ticketType: TicketType) => {
                 Tickets bestellen
               </button>
               <TicketSelector
-                v-if="activeTicketSelector === 'evt-001-main'"
-                :ticket-types="eventStore.getEventById('evt-001')?.ticketTypes || []"
-                @select="(type) => buyTicket('evt-001', type)"
-                @close="activeTicketSelector = null"
+                  v-if="activeTicketSelector === 'evt-001-main'"
+                  :ticket-types="eventStore.getEventById('evt-001')?.ticketTypes || []"
+                  @select="(type) => buyTicket('evt-001', type)"
+                  @close="activeTicketSelector = null"
               />
             </div>
           </div>
@@ -331,6 +349,16 @@ const buyTicket = (eventId: string, ticketType: TicketType) => {
 					text-[#3F3A56] dark:text-[#F3ECDD]">
           Programma
         </h2>
+
+        <!-- Admin: Create New Event Button -->
+        <div class="text-center mb-8" v-if="userStore.currentUser?.isAdmin">
+          <button
+              @click="selectedEventId = 'new'"
+              class="bg-[#FF8A3D] hover:bg-[#E6752F] text-white font-bold px-6 py-3 rounded-lg transition"
+          >
+            ➕ Nieuw event aanmaken
+          </button>
+        </div>
 
         <div class="flex sm:flex-row gap-4 mb-5 items-center">
           <select class="px-4 py-2 rounded-md
@@ -411,11 +439,11 @@ const buyTicket = (eventId: string, ticketType: TicketType) => {
                   Tickets
                 </button>
                 <TicketSelector
-                  v-if="activeTicketSelector === 'evt-001-program-1'"
-                  class="bottom-0"
-                  :ticket-types="eventStore.getEventById('evt-001')?.ticketTypes || []"
-                  @select="(type) => buyTicket('evt-001', type)"
-                  @close="activeTicketSelector = null"
+                    v-if="activeTicketSelector === 'evt-001-program-1'"
+                    class="bottom-0"
+                    :ticket-types="eventStore.getEventById('evt-001')?.ticketTypes || []"
+                    @select="(type) => buyTicket('evt-001', type)"
+                    @close="activeTicketSelector = null"
                 />
               </div>
             </div>
@@ -471,12 +499,12 @@ const buyTicket = (eventId: string, ticketType: TicketType) => {
                   Tickets
                 </button>
                 <TicketSelector
-                  v-if="activeTicketSelector === 'evt-001-program-2'"
-                  class="bottom-0"
-                  event-id="evt-001"
-                  :ticket-types="eventStore.getEventById('evt-001')?.ticketTypes || []"
-                  @select="(type) => buyTicket('evt-001', type)"
-                  @close="activeTicketSelector = null"
+                    v-if="activeTicketSelector === 'evt-001-program-2'"
+                    class="bottom-0"
+                    event-id="evt-001"
+                    :ticket-types="eventStore.getEventById('evt-001')?.ticketTypes || []"
+                    @select="(type) => buyTicket('evt-001', type)"
+                    @close="activeTicketSelector = null"
                 />
               </div>
             </div>
@@ -486,8 +514,50 @@ const buyTicket = (eventId: string, ticketType: TicketType) => {
             <EventDisplay :event="demoEvent" />
           </div>
           <!-- Card END -->
+
+          <!-- Event Grid from Admin View -->
+          <div
+              v-for="event in events"
+              :key="event.id"
+              @click="openAdmin(event.id)"
+              class="bg-white dark:bg-[#2A263A]
+                   border border-[#3F3A56]/10 dark:border-[#F3ECDD]/10
+                   rounded-xl shadow-md
+                   p-6 cursor-pointer hover:scale-[1.02] transition
+                   flex flex-col justify-between"
+          >
+            <div>
+              <h3 class="text-xl font-bold mb-2">
+                {{ event.name }}
+              </h3>
+
+              <p class="text-sm mb-2">
+                Max bezoekers: {{ event.maxAttendees }}
+              </p>
+
+              <ul class="text-sm space-y-1">
+                <li v-for="s in event.sessions" :key="s.id">
+                  {{ s.title }} — {{ formatTime(s.start) }} - {{ formatTime(s.end) }}
+                  ({{ s.location }})
+                </li>
+              </ul>
+            </div>
+
+            <button
+                class="mt-4 bg-[#FF8A3D] text-white px-3 py-2 rounded"
+            >
+              Beheer event
+            </button>
+          </div>
         </div>
       </div>
+
+      <!-- Test Admin Modal -->
+      <TestAdmin
+          v-if="selectedEventId"
+          :eventId="selectedEventId"
+          @close="closeAdmin"
+      />
     </section>
 
     <section id="sprekers" class="bg-[#FBF6EE] dark:bg-[#1F1D2B]">
