@@ -2,6 +2,7 @@
 import EventDisplay from "../components/EventDisplay.vue";
 import type { Event } from '../stores/event';
 
+
 const demoEvent: Event = {
   id: 'evt-001',
   name: 'Vue.js Conference 2024',
@@ -15,7 +16,8 @@ const demoEvent: Event = {
       type: 'lecture',
       location: 'Main Hall',
       title: 'Introduction to Vue 3 Composition API',
-      description: 'Learn the fundamentals of Vue 3 Composition API and how to build modern applications.'
+      description: 'Learn the fundamentals of Vue 3 Composition API and how to build modern applications.',
+     
     },
     {
       id: 'ses-002',

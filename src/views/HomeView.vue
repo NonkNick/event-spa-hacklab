@@ -11,7 +11,10 @@ import { useTicketStore } from '../stores/ticket'
 import { useUserStore } from '../stores/user'
 import { useEventStore } from '../stores/event'
 
+import EventGrid from '../components/EventGrid.vue'
+
 import type { Event } from '../stores/event.ts'
+
 
 const eventStore = useEventStore()
 const ticketStore = useTicketStore()
@@ -86,10 +89,28 @@ onMounted(() => {
   }
 })
 
-const demoEvent: Event = {
+/*const demoEvent: Event = {
   id: 'evt-001',
   name: 'Vue.js Conference 2024',
   maxAttendees: 250,
+  tickets: [
+    {
+      id: 'tkt-001',
+      userId: 'usr-001',
+      eventId: 'evt-001',
+      
+      price: 99,
+      createdAt: new Date('2024-06-01T10:00:00')
+    },
+    {
+      id: 'tkt-002',
+      userId: 'usr-002',
+      eventId: 'evt-001',
+      name: 'Regular Ticket',
+      price: 149,
+      createdAt: new Date('2024-07-01T12:00:00')
+    }
+  ],
   sessions: [
     {
       id: 'ses-001',
@@ -100,7 +121,11 @@ const demoEvent: Event = {
       location: 'Main Hall',
       title: 'Introduction to Vue 3 Composition API',
       description:
-        'Learn the fundamentals of Vue 3 Composition API and how to build modern applications.'
+        'Learn the fundamentals of Vue 3 Composition API and how to build modern applications.',
+       
+            
+        
+        
     },
     {
       id: 'ses-002',
@@ -136,7 +161,7 @@ const demoEvent: Event = {
         'Unwind with fellow developers and speakers over drinks and appetizers.'
     }
   ]
-}
+}*/
 </script>
 
 <template>
@@ -309,67 +334,15 @@ const demoEvent: Event = {
 
    <!-- PROGRAMMA -->
     <section id="programma" class="bg-[#FBF6EE] dark:bg-[#1F1D2B] py-16">
-  <div class="max-w-6xl mx-auto px-4">
-
-    <h2 class="text-4xl font-bold mb-10 text-center">
-      Programma
-    </h2>
-
-    <!-- ✅ NIEUWE KNOP -->
-    <div class="text-center mb-8" v-if="userStore.currentUser?.isAdmin">
-      <button
-        @click="selectedEventId = 'new'"
-        class="bg-[#FF8A3D] hover:bg-[#E6752F] text-white font-bold px-6 py-3 rounded-lg transition"
-      >
-        ➕ Nieuw event aanmaken
-      </button>
-    </div>
+  <div class="w-full max-w-6xl mx-auto px-4">
+    
+  <EventGrid
+  @open-admin="openAdmin"
+  @create-event="selectedEventId = 'new'"
+/>
+    <TestAdmin v-if="selectedEventId" :eventId="selectedEventId" @close="closeAdmin" />
   </div>
-
- 
-<div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-  <div
-    v-for="event in events"
-    :key="event.id"
-    @click="openAdmin(event.id)"
-    class="bg-white dark:bg-[#2A263A]
-           border border-[#3F3A56]/10 dark:border-[#F3ECDD]/10
-           rounded-xl shadow-md
-           p-6 cursor-pointer hover:scale-[1.02] transition
-           flex flex-col justify-between"
-  >
-    <div>
-      <h3 class="text-xl font-bold mb-2">
-        {{ event.name }}
-      </h3>
-
-      <p class="text-sm mb-2">
-        Max bezoekers: {{ event.maxAttendees }}
-      </p>
-
-      <ul class="text-sm space-y-1">
-        <li v-for="s in event.sessions" :key="s.id">
-          {{ s.title }} — {{ formatTime(s.start) }} - {{ formatTime(s.end) }}
-          ({{ s.location }})
-        </li>
-      </ul>
-    </div>
-
-    <button
-      class="mt-4 bg-[#FF8A3D] text-white px-3 py-2 rounded"
-    >
-      Beheer event
-    </button>
-  </div>
-</div>
-
-  <TestAdmin
-    v-if="selectedEventId"
-    :eventId="selectedEventId"
-    @close="closeAdmin"
-  />
 </section>
-
 		<section id="sprekers" class="bg-[#FBF6EE] dark:bg-[#1F1D2B]">
 			<SpeakerGrid />
 		</section>

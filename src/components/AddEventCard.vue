@@ -1,17 +1,12 @@
-<script setup lang="ts">
-defineEmits<{
-  (e: 'click'): void
-}>()
-</script>
-
 <template>
   <div
-    class="flex items-center justify-center w-full max-w-xs h-60
+    class="flex items-center justify-center
            border-2 border-dashed border-[#FF8A3D]
-           rounded-xl cursor-pointer text-[#FF8A3D]
-           hover:bg-[#FF8A3D]/10 transition"
-    @click="$emit('click')"
+           rounded-xl
+           w-full sm:w-[45%] lg:w-[30%]
+           text-5xl font-bold text-[#FF8A3D]
+           h-48 hover:bg-[#FF8A3D]/10 transition cursor-pointer"
   >
-    <span class="text-5xl font-bold">＋</span>
+    +
   </div>
 </template>

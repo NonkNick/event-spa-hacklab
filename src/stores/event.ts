@@ -11,6 +11,8 @@ export interface Session {
   type?: SessionType
   location: string
   speakerId?: string
+  description?: string
+  
 }
 
 export interface TicketType {
@@ -23,6 +25,7 @@ export interface TicketType {
 export interface Event {
   id: string
   name: string
+  date: Date
   maxAttendees: number
   sessions: Session[]
   tickets: TicketType[]
@@ -45,6 +48,7 @@ export const useEventStore = defineStore('event', {
         id: crypto.randomUUID(),
         name: 'Hackfront Conference 2026',
         maxAttendees: 150,
+        date: new Date('2026-10-25'),
         sessions: [
           {
             id: crypto.randomUUID(),
@@ -139,7 +143,7 @@ export const useEventStore = defineStore('event', {
       const event = this.events.find(e => e.id === eventId)
       if (!event) return
 
-      const ticket = event.tickets.find(t => t.id === ticketId)
+      const ticket = event.tickets?.find(t => t.id === ticketId)
       if (!ticket) return
 
       Object.assign(ticket, updated)
